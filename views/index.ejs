@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Upload App</title>
+</head>
+<style>
+    .csvfiles li {
+    list-style: none;
+    color: #fff !important;
+    font-weight: bold;
+}
+input.form-control {
+    background: white;
+}
+ul.csvfiles li a {
+    color: #fff;
+    line-height: 36px;
+}
+.uploaded h1 {
+    color: #fff;
+    font-weight: bold;
+    background: grey;
+    padding: 10px 30px;
+}
+</style>
+<body style="background-color: blue;">
+   <div class="uploaded"> <h1>Uploaded CSV Files</h1>
+    <ul class="csvfiles">
+        <% csvFiles.forEach(function (file) { %>
+            <li>
+                <a href="/csv/<%= file._id %>"><%= file.filename %></a>
+            </li>
+        <% }); %>
+    </ul>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input class="form-control" type="file" name="csvFile">
+        <button type="submit">Upload CSV</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Data</title>
+</head>
+<body>
+    <h1>CSV Data</h1>
+    
+    <!-- Search Box -->
+    <input type="text" id="searchInput" placeholder="Search by Column X">
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <% data[0] && Object.keys(data[0]).forEach(function (key) { %>
+                    <th>
+                        <%= key %>
+                        <button class="sort-button" data-column="<%= key %>">▲</button>
+                    </th>
+                <% }); %>
+            </tr>
+            <tr>
+                <% data[0] && Object.keys(data[0]).forEach(function (key) { %>
+                    <th><%= key %></th>
+                <% }); %>
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach(function (row) { %>
+                <tr>
+                    <% Object.values(row).forEach(function (value) { %>
+                        <td><%= value %></td>
+                    <% }); %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <a href="/">Back to List</a>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        searchInput.addEventListener('input', function () {
+            const searchValue = searchInput.value.toLowerCase();
+
+            tableRows.forEach(function (row) {
+                let found = false;
+                row.querySelectorAll('td').forEach(function (cell) {
+                    if (cell.textContent.toLowerCase().includes(searchValue)) {
+                        found = true;
+                    }
+                });
+                if (found) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        const table = document.querySelector('table');
+    const sortButtons = document.querySelectorAll('.sort-button');
+
+    sortButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const column = button.getAttribute('data-column');
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+            rows.sort((a, b) => {
+                const aValue = a.querySelector(`td[data-column="${column}"]`).textContent.trim();
+                const bValue = b.querySelector(`td[data-column="${column}"]`).textContent.trim();
+
+                return aValue.localeCompare(bValue);
+            });
+
+            if (button.classList.contains('ascending')) {
+                rows.reverse();
+                button.innerHTML = '▼';
+                button.classList.remove('ascending');
+            } else {
+                button.innerHTML = '▲';
+                button.classList.add('ascending');
+            }
+
+            rows.forEach((row) => {
+                table.querySelector('tbody').appendChild(row);
+            });
+        });
+    });
+
+    </script>
+</body>
+</html>
+
+
